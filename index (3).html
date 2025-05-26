@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bleeding Disorder | Patient Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 font-sans antialiased min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-lg flex items-center justify-between px-4 md:px-8 py-4 border-b border-red-100/50 transition-all duration-300">
+    <div class="flex items-center gap-4">
+      <!-- Hamburger icon -->
+      <button onclick="toggleDrawer()" class="block p-2 rounded-lg hover:bg-red-50 transition-colors">
+        <i data-lucide="menu" class="w-7 h-7 text-red-600"></i>
+      </button>
+      <img src="OIP (1).png" alt="Logo" class="w-12 h-12 object-contain" />
+      <h1 class="text-xl md:text-2xl font-extrabold text-red-700 uppercase tracking-tight">Hemophilia Society of Bangladesh</h1>
+    </div>
+  </header>
+
+  <div class="flex pt-20 flex-1">
+
+    <!-- Drawer -->
+    <aside id="drawer" 
+      class="fixed top-0 left-0 h-full w-72 bg-white/95 backdrop-blur-md border-r border-red-100/50 shadow-2xl transform -translate-x-full transition-transform duration-500 ease-out z-50">
+      
+      <!-- Drawer Header -->
+      <div class="bg-gradient-to-r from-red-600 to-red-800 p-6 flex items-center gap-4 border-b border-red-200/50">
+        <img id="drawerUserImage" src="https://via.placeholder.com/150" alt="User" class="w-12 h-12 rounded-full object-cover border-2 border-white shadow-md" />
+        <div>
+          <h2 class="text-lg font-semibold text-white">Patient Portal</h2>
+          <p id="drawerWelcome" class="text-sm text-red-100">Welcome, Guest</p>
+        </div>
+        <button onclick="toggleDrawer()" class="ml-auto text-white hover:bg-red-700 p-2 rounded-full transition-colors">
+          <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+      </div>
+
+      <nav class="flex flex-col space-y-3 px-6 py-4">
+        <a href="#" class="flex items-center gap-3 text-red-700 font-medium text-lg hover:bg-red-50 hover:text-red-800 px-4 py-3 rounded-lg transition-all duration-200">
+          <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+        </a>
+        <a href="#" onclick="logout()" class="flex items-center gap-3 text-red-600 font-medium text-lg hover:bg-red-50 hover:text-red-800 px-4 py-3 rounded-lg transition-all duration-200">
+          <i data-lucide="log-out" class="w-5 h-5"></i> Logout
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Overlay -->
+    <div id="overlay" 
+      onclick="toggleDrawer()" 
+      class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-40"></div>
+
+    <!-- Main content -->
+    <main class="flex-1 pt-8 md:pt-12 px-4 md:px-8 max-w-6xl mx-auto space-y-10">
+
+      <!-- Login Section -->
+      <div id="loginSection" class="flex justify-center items-center min-h-[60vh] animate-fade-in">
+        <div class="bg-white/90 backdrop-blur-md p-8 rounded-2xl shadow-2xl w-full max-w-md border border-red-100/30 transition-all duration-300 hover:shadow-xl">
+          <h2 class="text-3xl font-extrabold text-center text-red-700 mb-8 tracking-tight">Patient Login</h2>
+          <input id="loginId" type="text" placeholder="Enter Patient ID" class="w-full px-5 py-3 mb-5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-300 focus:border-red-400 outline-none transition-all duration-200 bg-gray-50 text-gray-700 placeholder-gray-400" />
+          <input id="loginPhone" type="text" placeholder="Enter Phone Number" class="w-full px-5 py-3 mb-5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-300 focus:border-red-400 outline-none transition-all duration-200 bg-gray-50 text-gray-700 placeholder-gray-400" />
+          <button id="loginBtn" class="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 focus:ring-4 focus:ring-red-200 font-semibold text-lg transition-all duration-300 flex items-center justify-center">
+            <span id="loginBtnText">Login</span>
+            <svg id="loginSpinner" class="hidden animate-spin h-5 w-5 ml-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </button>
+          <p id="loginError" class="text-red-500 text-sm text-center mt-4 hidden">Invalid Patient ID or Phone Number</p>
+        </div>
+      </div>
+
+      <!-- Dashboard Section -->
+      <div id="dashboardSection" class="hidden space-y-10 animate-fade-in">
+
+        <!-- Patient Info -->
+        <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-xl p-8 flex flex-col md:flex-row items-center gap-8 border-l-4 border-red-500 transition-all duration-300 hover:shadow-2xl">
+          <img id="patientImage" src="" alt="Patient" class="w-48 h-48 rounded-full object-cover border-2 border-red-100 shadow-md" />
+          <div class="space-y-3 text-base text-gray-700">
+            <p><strong class="font-semibold text-red-700">Name:</strong> <span id="patientName"></span></p>
+            <p><strong class="font-semibold text-red-700">ID:</strong> <span id="pId"></span></p>
+            <p><strong class="font-semibold text-red-700">DOB:</strong> <span id="pDob"></span></p>
+            <p><strong class="font-semibold text-red-700">Phone:</strong> <span id="pPhone"></span></p>
+          </ stony-gray-700">
+            <p><strong class="font-semibold text-red-700">Phone:</strong> <span id="pPhone"></span></p>
+          </div>
+        </div>
+
+        <!-- Injection History -->
+        <div id="injectionsContainer" class="bg-white/95 backdrop-blur-md rounded-2xl shadow-xl p-8 border-t-4 border-blue-500 transition-all duration-300 hover:shadow-2xl">
+          <h3 class="text-2xl font-bold text-blue-800 mb-6 tracking-tight">Injection History</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full table-auto text-sm text-left">
+              <thead class="bg-blue-50/50 text-blue-700 font-semibold">
+                <tr>
+                  <th class="px-6 py-4 rounded-tl-lg">Date</th>
+                  <th class="px-6 py-4">Type</th>
+                  <th class="px-6 py-4 rounded-tr-lg">Dosage</th>
+                </tr>
+              </thead>
+              <tbody id="injectionTable" class="divide-y divide-gray-100 text-gray-700"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Subscription History -->
+        <div id="subscriptionsContainer" class="bg-white/95 backdrop-blur-md rounded-2xl shadow-xl p-8 border-t-4 border-green-500 transition-all duration-300 hover:shadow-2xl">
+          <h3 class="text-2xl font-bold text-green-700 mb-6 tracking-tight">Subscription Fees</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full table-auto text-sm text-left">
+              <thead class="bg-green-50/50 text-green-700 font-semibold">
+                <tr>
+                  <th class="px-6 py-4 rounded-tl-lg">Transaction No</th>
+                  <th class="px-6 py-4">Year</th>
+                  <th class="px-6 py-4">Amount</th>
+                  <th class="px-6 py-4 rounded-tr-lg">Date</th>
+                </tr>
+              </thead>
+              <tbody id="subscriptionTable" class="divide-y divide-gray-100 text-gray-700"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-8 bg-white/95 backdrop-blur-md border-t border-red-100/50 py-8">
+    <div class="max-w-6xl mx-auto text-center px-4">
+      <p class="text-sm text-gray-600 mb-2">© 2025 Hemophilia Society of Bangladesh. All rights reserved.</p>
+      <p class="text-sm text-gray-500 mb-6">Developed by <span class="font-semibold text-red-700">Binty</span></p>
+      <div class="flex justify-center space-x-6">
+        <!-- Facebook -->
+        <a href="https://facebook.com" target="_blank" class="text-gray-500 hover:text-blue-600 transition-colors duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-6 h-6" viewBox="0 0 24 24">
+            <path d="M22 12a10 10 0 10-11.5 9.9v-7H8v-3h2.5V9.5a3.5 3.5 0 013.7-3.9c1.1 0 2.3.2 2.3.2v2.6h-1.3c-1.3 0-1.7.8-1.7 1.6V12h3l-.5 3h-2.5v7A10 10 0 0022 12z"/>
+          </svg>
+        </a>
+        <!-- Discord -->
+        <a href="https://discord.com" target="_blank" class="text-gray-500 hover:text-indigo-600 transition-colors duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-6 h-6" viewBox="0 0 24 24">
+            <path d="M20.317 4.369a19.791 19.791 0 00-4.885-1.515.07.07 0 00-.073.035 13.86 13.86 0 00-.652 1.34 18.27 18.27 0 00-5.486 0 13.4 13.4 0 00-.659-1.34.07.07 0 00-.073-.035c-1.65.342-3.38.911-4.885 1.515a.064.064 0 00-.03.024C2.099 9.139 1.367 13.73 1.676 18.278a.08.08 0 00.031.056 19.93 19.93 0 006.097 3.099.07.07 0 00.076-.027c.471-.645.889-1.333 1.247-2.054a.07.07 0 00-.038-.097 13.186 13.186 0 01-1.884-.912.07.07 0 01.007-.122c.127-.096.254-.195.376-.291a.07.07 0 01.072-.01c3.927 1.787 8.18 1.787 12.061 0a.07.07 0 01.073.009c.123.096.25.195.378.292a.07.07 0 01.006.121 12.317 12.317 0 01-1.884.912.07.07 0 00-.038.098c.36.72.778 1.408 1.247 2.053a.07.07 0 00.076.028 19.888 19.888 0 006.096-3.098.07.07 0 00.031-.056c.405-5.088-.675-9.645-2.986-13.885a.061.061 0 00-.03-.025zM8.02 15.331c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.21 0 2.175 1.094 2.157 2.418 0 1.334-.955 2.419-2.157 2.419zm7.974 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.21 0 2.175 1.094 2.157 2.418 0 1.334-.947 2.419-2.157 2.419z"/>
+          </svg>
+        </a>
+        <!-- Gmail -->
+        <a href="mailto:info@hemophilia.org.bd" class="text-gray-500 hover:text-red-600 transition-colors duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-6 h-6" viewBox="0 0 24 24">
+            <path d="M12 13.065L2.25 6.75v10.5A1.75 1.75 0 004 19h16a1.75 1.75 0 001.75-1.75V6.75l-9.75 6.315zM21.543 5.072A1.75 1.75 0 0019.75 4H4.25a1.75 1.75 0 00-1.793 1.072L12 11.682l9.543-6.61z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Firebase & App Scripts -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB7QLBLarDiqdpYy5jw8_1e-gTR-aR1Wqc",
+      authDomain: "hemophilia-society-of-bd.firebaseapp.com",
+      projectId: "hemophilia-society-of-bd",
+      storageBucket: "hemophilia-society-of-bd.appspot.com",
+      messagingSenderId: "674332798483",
+      appId: "1:674332798483:web:cedb62cb05e03b5cadd9e6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const loginBtn = document.getElementById("loginBtn");
+    const loginBtnText = document.getElementById("loginBtnText");
+    const loginSpinner = document.getElementById("loginSpinner");
+    const loginError = document.getElementById("loginError");
+
+    loginBtn.addEventListener("click", async () => {
+      const patientId = document.getElementById("loginId").value.trim();
+      const phone = document.getElementById("loginPhone").value.trim();
+
+      if (!patientId || !phone) {
+        loginError.textContent = "Both fields are required.";
+        loginError.classList.remove("hidden");
+        return;
+      }
+
+      loginBtn.disabled = true;
+      loginBtnText.textContent = "Logging in...";
+      loginSpinner.classList.remove("hidden");
+
+      try {
+        const snapshot = await get(ref(db, `patients/${patientId}`));
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          if (data.phone === phone) {
+            loginError.classList.add("hidden");
+            showDashboard(data);
+            fetchInjections(patientId);
+            fetchSubscriptions(patientId);
+            document.getElementById("drawerUserImage").src = data.imageUrl || 'https://via.placeholder.com/150';
+            document.getElementById("drawerWelcome").textContent = `Welcome, ${data.name || 'Guest'}`;
+          } else {
+            loginError.textContent = "Incorrect phone number.";
+            loginError.classList.remove("hidden");
+          }
+        } else {
+          loginError.textContent = "Patient not found.";
+          loginError.classList.remove("hidden");
+        }
+      } catch (error) {
+        console.error(error);
+        loginError.textContent = "Database error.";
+        loginError.classList.remove("hidden");
+      } finally {
+        loginBtn.disabled = false;
+        loginBtnText.textContent = "Login";
+        loginSpinner.classList.add("hidden");
+      }
+    });
+
+    function showDashboard(data) {
+      document.getElementById("loginSection").classList.add("hidden");
+      document.getElementById("dashboardSection").classList.remove("hidden");
+      document.getElementById("patientName").textContent = data.name || '';
+      document.getElementById("pId").textContent = data.patientId || '';
+      document.getElementById("pDob").textContent = data.dob || '';
+      document.getElementById("pPhone").textContent = data.phone || '';
+      document.getElementById("patientImage").src = data.imageUrl || 'https://via.placeholder.com/150';
+    }
+
+    async function fetchInjections(patientId) {
+      const snapshot = await get(ref(db, `injections/${patientId}`));
+      const table = document.getElementById("injectionTable");
+      table.innerHTML = "";
+      if (snapshot.exists()) {
+        Object.values(snapshot.val()).forEach(inj => {
+          table.innerHTML += `<tr class="hover:bg-blue-50/50 transition-colors">
+            <td class="px-6 py-4">${inj.date || ''}</td>
+            <td class="px-6 py-4">${inj.injectionType || ''}</td>
+            <td class="px-6 py-4">${inj.dosage || ''}</td>
+          </tr>`;
+        });
+      } else {
+        table.innerHTML = `<tr><td colspan="3" class="text-center py-4 text-red-500">No records found</td></tr>`;
+      }
+    }
+
+    async function fetchSubscriptions(patientId) {
+      const snapshot = await get(ref(db, `subscriptions/${patientId}/yearly`));
+      const table = document.getElementById("subscriptionTable");
+      table.innerHTML = "";
+      if (snapshot.exists()) {
+        Object.values(snapshot.val()).forEach(sub => {
+          table.innerHTML += `<tr class="hover:bg-green-50/50 transition-colors">
+            <td class="px-6 py-4">${sub.transactionNumber || ''}</td>
+            <td class="px-6 py-4">${sub.year || ''}</td>
+            <td class="px-6 py-4">${sub.amount || ''}</td>
+            <td class="px-6 py-4">${sub.date || ''}</td>
+          </tr>`;
+        });
+      } else {
+        table.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-red-500">No subscriptions found</td></tr>`;
+      }
+    }
+
+    window.toggleDrawer = function () {
+      const drawer = document.getElementById("drawer");
+      const overlay = document.getElementById("overlay");
+      const isHidden = drawer.classList.contains("-translate-x-full");
+
+      if (isHidden) {
+        drawer.classList.remove("-translate-x-full");
+        overlay.classList.remove("hidden");
+      } else {
+        drawer.classList.add("-translate-x-full");
+        overlay.classList.add("hidden");
+      }
+    };
+
+    window.logout = function () {
+      location.reload();
+    };
+  </script>
+
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-out forwards;
+    }
+  </style>
+
+  <script>lucide.createIcons();</script>
+</body>
+</html>
