@@ -1,23 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Bleeding Disorder | Patient Portal</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 font-sans antialiased min-h-screen flex flex-col">
+<body class="bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 font-['Noto_Sans_Bengali',sans-serif] antialiased min-h-screen flex flex-col transition-colors duration-300">
 
   <!-- Header -->
-  <header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-lg flex items-center justify-between px-4 md:px-8 py-4 border-b border-red-100/50 transition-all duration-300">
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-lg flex items-center justify-between px-4 md:px-8 py-4 border-b border-red-100/50 dark:border-red-900/50 transition-all duration-300">
     <div class="flex items-center gap-4">
-      <!-- Hamburger icon -->
-      <button onclick="toggleDrawer()" class="block p-2 rounded-lg hover:bg-red-50 transition-colors">
-        <i data-lucide="menu" class="w-7 h-7 text-red-600"></i>
+      <button id="drawerToggleBtn" class="block p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/50 transition-colors hover:shadow-glow-red">
+        <i data-lucide="menu" class="w-7 h-7 text-red-600 dark:text-red-400"></i>
       </button>
       <img src="OIP (1).png" alt="Logo" class="w-12 h-12 object-contain" />
-      <h1 class="text-xl md:text-2xl font-extrabold text-red-700 uppercase tracking-tight">Hemophilia Society of Bangladesh</h1>
+      <h1 class="text-xl md:text-2xl font-extrabold text-red-700 dark:text-red-400 uppercase tracking-tight">Hemophilia Society of Bangladesh</h1>
     </div>
   </header>
 
@@ -25,130 +27,170 @@
 
     <!-- Drawer -->
     <aside id="drawer" 
-      class="fixed top-0 left-0 h-full w-72 bg-white/95 backdrop-blur-md border-r border-red-100/50 shadow-2xl transform -translate-x-full transition-transform duration-500 ease-out z-50">
-      
-      <!-- Drawer Header -->
-      <div class="bg-gradient-to-r from-red-600 to-red-800 p-6 flex items-center gap-4 border-b border-red-200/50">
-        <img id="drawerUserImage" src="https://via.placeholder.com/150" alt="User" class="w-12 h-12 rounded-full object-cover border-2 border-white shadow-md" />
+      class="fixed top-0 left-0 h-full w-72 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-r border-red-100/50 dark:border-red-900/50 shadow-2xl transform -translate-x-full transition-transform duration-500 ease-out z-50">
+      <div class="bg-gradient-to-r from-red-600 to-red-800 p-6 flex items-center gap-4 border-b border-red-200/50 dark:border-red-900/50">
+        <img id="drawerUserImage" src="https://via.placeholder.com/150" alt="User" class="w-12 h-12 rounded-full object-cover border-2 border-white dark:border-gray-700 shadow-md" />
         <div>
-          <h2 class="text-lg font-semibold text-white">Patient Portal</h2>
-          <p id="drawerWelcome" class="text-sm text-red-100">Welcome, Guest</p>
+          <h2 class="text-lg font-semibold text-white">রোগী পোর্টাল</h2>
+          <p id="drawerWelcome" class="text-sm text-red-100">স্বাগতম, অতিথি</p>
         </div>
         <button onclick="toggleDrawer()" class="ml-auto text-white hover:bg-red-700 p-2 rounded-full transition-colors">
           <i data-lucide="x" class="w-6 h-6"></i>
         </button>
       </div>
-
       <nav class="flex flex-col space-y-3 px-6 py-4">
-        <a href="#" class="flex items-center gap-3 text-red-700 font-medium text-lg hover:bg-red-50 hover:text-red-800 px-4 py-3 rounded-lg transition-all duration-200">
-          <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+        <a href="#dashboard" onclick="showSection('dashboardSection')" class="flex items-center gap-3 text-red-700 dark:text-red-400 font-medium text-lg hover:bg-red-50 dark:hover:bg-red-900/50 hover:text-red-800 dark:hover:text-red-300 px-4 py-3 rounded-lg transition-all duration-200 hover:shadow-glow-red">
+          <i data-lucide="layout-dashboard" class="w-5 h-5"></i> ড্যাশবোর্ড
         </a>
-        <a href="#" onclick="logout()" class="flex items-center gap-3 text-red-600 font-medium text-lg hover:bg-red-50 hover:text-red-800 px-4 py-3 rounded-lg transition-all duration-200">
-          <i data-lucide="log-out" class="w-5 h-5"></i> Logout
+        <a href="#emergency-prescription" onclick="showSection('emergencyPrescriptionSection')" class="flex items-center gap-3 text-red-700 dark:text-red-400 font-medium text-lg hover:bg-red-50 dark:hover:bg-red-900/50 hover:text-red-800 dark:hover:text-red-300 px-4 py-3 rounded-lg transition-all duration-200 hover:shadow-glow-red">
+          <i data-lucide="syringe" class="w-5 h-5"></i> জরুরি প্রেসক্রিপশন
+        </a>
+        <a href="#" class="flex items-center gap-3 text-red-700 dark:text-red-400 font-medium text-lg hover:bg-red-50 dark:hover:bg-red-900/50 hover:text-red-800 dark:hover:text-red-300 px-4 py-3 rounded-lg transition-all duration-200 hover:shadow-glow-red">
+          <i data-lucide="map-pin" class="w-5 h-5"></i> আপনার কাছাকাছি ফ্যাক্টর
+        </a>
+        <button onclick="toggleDarkMode()" class="flex items-center gap-3 text-red-600 dark:text-red-400 font-medium text-lg hover:bg-red-50 dark:hover:bg-red-900/50 hover:text-red-800 dark:hover:text-red-300 px-4 py-3 rounded-lg transition-all duration-200 hover:shadow-glow-red">
+          <i id="darkModeIcon" data-lucide="moon" class="w-5 h-5"></i> ডার্ক মোড টগল করুন
+        </button>
+        <a href="#" onclick="logout()" class="flex items-center gap-3 text-red-600 dark:text-red-400 font-medium text-lg hover:bg-red-50 dark:hover:bg-red-900/50 hover:text-red-800 dark:hover:text-red-300 px-4 py-3 rounded-lg transition-all duration-200 hover:shadow-glow-red">
+          <i data-lucide="log-out" class="w-5 h-5"></i> লগআউট
         </a>
       </nav>
     </aside>
 
     <!-- Overlay -->
-    <div id="overlay" 
-      onclick="toggleDrawer()" 
-      class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-40"></div>
+    <div id="overlay" onclick="toggleDrawer()" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-40"></div>
 
     <!-- Main content -->
     <main class="flex-1 pt-8 md:pt-12 px-4 md:px-8 max-w-6xl mx-auto space-y-10">
 
-      <!-- Login Section -->
+      <!-- Login Section (English) -->
       <div id="loginSection" class="flex justify-center items-center min-h-[60vh] animate-fade-in">
-        <div class="bg-white/90 backdrop-blur-md p-8 rounded-2xl shadow-2xl w-full max-w-md border border-red-100/30 transition-all duration-300 hover:shadow-xl">
-          <h2 class="text-3xl font-extrabold text-center text-red-700 mb-8 tracking-tight">Patient Login</h2>
-          <input id="loginId" type="text" placeholder="Enter Patient ID" class="w-full px-5 py-3 mb-5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-300 focus:border-red-400 outline-none transition-all duration-200 bg-gray-50 text-gray-700 placeholder-gray-400" />
-          <input id="loginPhone" type="text" placeholder="Enter Phone Number" class="w-full px-5 py-3 mb-5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-300 focus:border-red-400 outline-none transition-all duration-200 bg-gray-50 text-gray-700 placeholder-gray-400" />
-          <button id="loginBtn" class="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 focus:ring-4 focus:ring-red-200 font-semibold text-lg transition-all duration-300 flex items-center justify-center">
+        <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md p-8 rounded-2xl shadow-2xl w-full max-w-md border border-red-100/30 dark:border-red-900/30 transition-all duration-300 hover:shadow-xl">
+          <h2 class="text-3xl font-extrabold text-center text-red-700 dark:text-red-400 mb-8 tracking-tight">Patient Login</h2>
+          <input id="loginId" type="text" placeholder="Enter Patient ID" class="w-full px-5 py-3 mb-5 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-300 dark:focus:ring-red-500 focus:border-red-400 dark:focus:border-red-400 outline-none transition-all duration-200 bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500" />
+          <input id="loginPhone" type="text" placeholder="Enter Phone Number" class="w-full px-5 py-3 mb-5 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-300 dark:focus:ring-red-500 focus:border-red-400 dark:focus:border-red-400 outline-none transition-all duration-200 bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500" />
+          <button id="loginBtn" class="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 dark:hover:bg-red-500 focus:ring-4 focus:ring-red-200 dark:focus:ring-red-600 font-semibold text-lg transition-all duration-300 flex items-center justify-center hover:shadow-glow-red">
             <span id="loginBtnText">Login</span>
             <svg id="loginSpinner" class="hidden animate-spin h-5 w-5 ml-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
           </button>
-          <p id="loginError" class="text-red-500 text-sm text-center mt-4 hidden">Invalid Patient ID or Phone Number</p>
+          <p id="loginError" class="text-red-500 dark:text-red-400 text-sm text-center mt-4 hidden">Invalid Patient ID or Phone Number</p>
         </div>
       </div>
 
-      <!-- Dashboard Section -->
+      <!-- Dashboard Section (Bangla) -->
       <div id="dashboardSection" class="hidden space-y-10 animate-fade-in">
-
-        <!-- Patient Info -->
-        <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-xl p-8 flex flex-col md:flex-row items-center gap-8 border-l-4 border-red-500 transition-all duration-300 hover:shadow-2xl">
-          <img id="patientImage" src="" alt="Patient" class="w-48 h-48 rounded-full object-cover border-2 border-red-100 shadow-md" />
-          <div class="space-y-3 text-base text-gray-700">
-            <p><strong class="font-semibold text-red-700">Name:</strong> <span id="patientName"></span></p>
-            <p><strong class="font-semibold text-red-700">ID:</strong> <span id="pId"></span></p>
-            <p><strong class="font-semibold text-red-700">DOB:</strong> <span id="pDob"></span></p>
-            <p><strong class="font-semibold text-red-700">Phone:</strong> <span id="pPhone"></span></p>
-          </ stony-gray-700">
-            <p><strong class="font-semibold text-red-700">Phone:</strong> <span id="pPhone"></span></p>
+        <div class="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-2xl shadow-xl p-8 flex flex-col md:flex-row items-center gap-8 border-l-4 border-red-500 dark:border-red-400 transition-all duration-300 hover:shadow-xl">
+          <img id="patientImage" src="" alt="Patient" class="w-48 h-48 rounded-full object-cover border-2 border-red-100 dark:border-red-900 shadow-md" />
+          <div class="space-y-3 text-base text-gray-700 dark:text-gray-200">
+            <p><strong class="font-semibold text-red-700 dark:text-red-400">নাম:</strong> <span id="patientName"></span></p>
+            <p><strong class="font-semibold text-red-700 dark:text-red-400">আইডি:</strong> <span id="pId"></span></p>
+            <p><strong class="font-semibold text-red-700 dark:text-red-400">জন্ম তারিখ:</strong> <span id="pDob"></span></p>
+            <p><strong class="font-semibold text-red-700 dark:text-red-400">ফোন:</strong> <span id="pPhone"></span></p>
           </div>
         </div>
-
-        <!-- Injection History -->
-        <div id="injectionsContainer" class="bg-white/95 backdrop-blur-md rounded-2xl shadow-xl p-8 border-t-4 border-blue-500 transition-all duration-300 hover:shadow-2xl">
-          <h3 class="text-2xl font-bold text-blue-800 mb-6 tracking-tight">Injection History</h3>
+        <div id="injectionsContainer" class="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-2xl shadow-xl p-8 border-t-4 border-blue-500 dark:border-blue-400 transition-all duration-300 hover:shadow-xl">
+          <h3 class="text-2xl font-bold text-blue-800 dark:text-blue-400 mb-6 tracking-tight">ইনজেকশন ইতিহাস</h3>
           <div class="overflow-x-auto">
             <table class="w-full table-auto text-sm text-left">
-              <thead class="bg-blue-50/50 text-blue-700 font-semibold">
+              <thead class="bg-blue-50/50 dark:bg-blue-900/50 text-blue-700 dark:text-blue-400 font-semibold">
                 <tr>
-                  <th class="px-6 py-4 rounded-tl-lg">Date</th>
-                  <th class="px-6 py-4">Type</th>
-                  <th class="px-6 py-4 rounded-tr-lg">Dosage</th>
+                  <th class="px-6 py-4 rounded-tl-lg">তারিখ</th>
+                  <th class="px-6 py-4">প্রকার</th>
+                  <th class="px-6 py-4 rounded-tr-lg">ডোজ</th>
                 </tr>
               </thead>
-              <tbody id="injectionTable" class="divide-y divide-gray-100 text-gray-700"></tbody>
+              <tbody id="injectionTable" class="divide-y divide-gray-100 dark:divide-gray-700 text-gray-700 dark:text-gray-200"></tbody>
             </table>
           </div>
         </div>
-
-        <!-- Subscription History -->
-        <div id="subscriptionsContainer" class="bg-white/95 backdrop-blur-md rounded-2xl shadow-xl p-8 border-t-4 border-green-500 transition-all duration-300 hover:shadow-2xl">
-          <h3 class="text-2xl font-bold text-green-700 mb-6 tracking-tight">Subscription Fees</h3>
+        <div id="subscriptionsContainer" class="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-2xl shadow-xl p-8 border-t-4 border-green-500 dark:border-green-400 transition-all duration-300 hover:shadow-xl">
+          <h3 class="text-2xl font-bold text-green-700 dark:text-green-400 mb-6 tracking-tight">সাবস্ক্রিপশন ফি</h3>
           <div class="overflow-x-auto">
             <table class="w-full table-auto text-sm text-left">
-              <thead class="bg-green-50/50 text-green-700 font-semibold">
+              <thead class="bg-green-50/50 dark:bg-green-900/50 text-green-700 dark:text-green-400 font-semibold">
                 <tr>
-                  <th class="px-6 py-4 rounded-tl-lg">Transaction No</th>
-                  <th class="px-6 py-4">Year</th>
-                  <th class="px-6 py-4">Amount</th>
-                  <th class="px-6 py-4 rounded-tr-lg">Date</th>
+                  <th class="px-6 py-4 rounded-tl-lg">লেনদেন নম্বর</th>
+                  <th class="px-6 py-4">বছর</th>
+                  <th class="px-6 py-4">পরিমাণ</th>
+                  <th class="px-6 py-4 rounded-tr-lg">তারিখ</th>
                 </tr>
               </thead>
-              <tbody id="subscriptionTable" class="divide-y divide-gray-100 text-gray-700"></tbody>
+              <tbody id="subscriptionTable" class="divide-y divide-gray-100 dark:divide-gray-700 text-gray-700 dark:text-gray-200"></tbody>
             </table>
           </div>
         </div>
-
       </div>
+
+      <!-- Emergency Prescription Section (Bangla) -->
+      <div id="emergencyPrescriptionSection" class="hidden space-y-10 animate-fade-in">
+        <div class="max-w-4xl mx-auto">
+          <h1 class="text-3xl font-bold text-center mb-6 text-red-700 dark:text-red-400">জরুরি প্রেসক্রিপশন খুঁজুন</h1>
+
+          <!-- Search Box -->
+          <div class="flex items-center gap-4 mb-4">
+            <input id="searchInput" type="text" placeholder="রোগীর আইডি লিখুন"
+              class="flex-grow border border-gray-300 dark:border-gray-600 rounded-md px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-red-300 dark:focus:ring-red-500 focus:border-red-400 dark:focus:border-red-400 outline-none transition-all duration-200" />
+            <button id="searchBtn" class="bg-red-600 hover:bg-red-700 dark:hover:bg-red-500 text-white px-6 py-2 rounded-md font-semibold transition-all duration-300 hover:shadow-glow-red">অনুসন্ধান</button>
+          </div>
+
+          <!-- Loader -->
+          <div id="loader" class="hidden text-center text-red-500 dark:text-red-400 font-medium mb-4">লোড হচ্ছে...</div>
+
+          <!-- Search Result -->
+          <div id="resultContainer" class="mb-6"></div>
+
+          <!-- Prescription Input -->
+          <div id="prescriptionForm" class="hidden">
+            <div class="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md p-6 rounded-xl shadow-xl space-y-4 border-l-4 border-red-500 dark:border-red-400 transition-all duration-300 hover:shadow-xl">
+              <h3 class="text-xl font-semibold text-red-700 dark:text-red-400">জরুরি প্রেসক্রিপশন তথ্য দিন</h3>
+              <input id="bleedingOrgan" type="text" placeholder="রক্তপাতের অঙ্গ (যেমন: হাঁটু)"
+                class="w-full px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-300 dark:focus:ring-red-500 focus:border-red-400 dark:focus:border-red-400 outline-none transition-all duration-200 bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500" />
+              <input id="bleedingDuration" type="number" placeholder="রক্তপাতের সময়কাল (ঘন্টা)"
+                class="w-full px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-300 dark:focus:ring-red-500 focus:border-red-400 dark:focus:border-red-400 outline-none transition-all duration-200 bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500" />
+              <button onclick="generatePrescription()"
+                class="w-full bg-red-600 hover:bg-red-700 dark:hover:bg-red-500 text-white py-2 px-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center hover:shadow-glow-red">
+                <span id="generateBtnText">প্রেসক্রিপশন তৈরি করুন</span>
+                <svg id="generateSpinner" class="hidden animate-spin h-5 w-5 ml-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Prescription Output -->
+          <div id="prescriptionPreview" class="mt-8 space-y-4">
+            <div id="prescriptionOutput"></div>
+            <button id="downloadBtn" onclick="downloadPDF()" class="hidden w-full bg-gradient-to-r from-green-600 to-green-700 dark:from-green-500 dark:to-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:from-green-700 hover:to-green-800 dark:hover:from-green-600 dark:hover:to-green-700 focus:ring-4 focus:ring-green-200 dark:focus:ring-green-600 transition-all duration-300 hover:shadow-glow-green">
+              প্রেসক্রিপশন ডাউনলোড করুন (PDF)
+            </button>
+          </div>
+        </div>
+      </div>
+
     </main>
   </div>
 
-  <!-- Footer -->
-  <footer class="mt-8 bg-white/95 backdrop-blur-md border-t border-red-100/50 py-8">
+  <!-- Footer (Bangla) -->
+  <footer class="mt-10 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-t border-red-100/50 dark:border-red-900/50 py-8 animate-fade-in">
     <div class="max-w-6xl mx-auto text-center px-4">
-      <p class="text-sm text-gray-600 mb-2">© 2025 Hemophilia Society of Bangladesh. All rights reserved.</p>
-      <p class="text-sm text-gray-500 mb-6">Developed by <span class="font-semibold text-red-700">Binty</span></p>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">© ২০২৫ হিমোফিলিয়া সোসাইটি অফ বাংলাদেশ। সর্বস্বত্ব সংরক্ষিত।</p>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">ডেভেলপ করেছেন <span class="font-semibold text-red-700 dark:text-red-400">Binty</span></p>
       <div class="flex justify-center space-x-6">
-        <!-- Facebook -->
-        <a href="https://facebook.com" target="_blank" class="text-gray-500 hover:text-blue-600 transition-colors duration-200">
+        <a href="https://facebook.com" target="_blank" class="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 hover:shadow-glow-blue">
           <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-6 h-6" viewBox="0 0 24 24">
             <path d="M22 12a10 10 0 10-11.5 9.9v-7H8v-3h2.5V9.5a3.5 3.5 0 013.7-3.9c1.1 0 2.3.2 2.3.2v2.6h-1.3c-1.3 0-1.7.8-1.7 1.6V12h3l-.5 3h-2.5v7A10 10 0 0022 12z"/>
           </svg>
         </a>
-        <!-- Discord -->
-        <a href="https://discord.com" target="_blank" class="text-gray-500 hover:text-indigo-600 transition-colors duration-200">
+        <a href="https://discord.com" target="_blank" class="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200 hover:shadow-glow-indigo">
           <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-6 h-6" viewBox="0 0 24 24">
             <path d="M20.317 4.369a19.791 19.791 0 00-4.885-1.515.07.07 0 00-.073.035 13.86 13.86 0 00-.652 1.34 18.27 18.27 0 00-5.486 0 13.4 13.4 0 00-.659-1.34.07.07 0 00-.073-.035c-1.65.342-3.38.911-4.885 1.515a.064.064 0 00-.03.024C2.099 9.139 1.367 13.73 1.676 18.278a.08.08 0 00.031.056 19.93 19.93 0 006.097 3.099.07.07 0 00.076-.027c.471-.645.889-1.333 1.247-2.054a.07.07 0 00-.038-.097 13.186 13.186 0 01-1.884-.912.07.07 0 01.007-.122c.127-.096.254-.195.376-.291a.07.07 0 01.072-.01c3.927 1.787 8.18 1.787 12.061 0a.07.07 0 01.073.009c.123.096.25.195.378.292a.07.07 0 01.006.121 12.317 12.317 0 01-1.884.912.07.07 0 00-.038.098c.36.72.778 1.408 1.247 2.053a.07.07 0 00.076.028 19.888 19.888 0 006.096-3.098.07.07 0 00.031-.056c.405-5.088-.675-9.645-2.986-13.885a.061.061 0 00-.03-.025zM8.02 15.331c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.21 0 2.175 1.094 2.157 2.418 0 1.334-.955 2.419-2.157 2.419zm7.974 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.21 0 2.175 1.094 2.157 2.418 0 1.334-.947 2.419-2.157 2.419z"/>
           </svg>
         </a>
-        <!-- Gmail -->
-        <a href="mailto:info@hemophilia.org.bd" class="text-gray-500 hover:text-red-600 transition-colors duration-200">
+        <a href="mailto:info@hemophilia.org.bd" class="text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors duration-200 hover:shadow-glow-red">
           <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-6 h-6" viewBox="0 0 24 24">
             <path d="M12 13.065L2.25 6.75v10.5A1.75 1.75 0 004 19h16a1.75 1.75 0 001.75-1.75V6.75l-9.75 6.315zM21.543 5.072A1.75 1.75 0 0019.75 4H4.25a1.75 1.75 0 00-1.793 1.072L12 11.682l9.543-6.61z"/>
           </svg>
@@ -162,6 +204,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
     import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-database.js";
 
+    const { jsPDF } = window.jspdf;
     const firebaseConfig = {
       apiKey: "AIzaSyB7QLBLarDiqdpYy5jw8_1e-gTR-aR1Wqc",
       authDomain: "hemophilia-society-of-bd.firebaseapp.com",
@@ -173,6 +216,7 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
+    let currentPatient = null;
 
     const loginBtn = document.getElementById("loginBtn");
     const loginBtnText = document.getElementById("loginBtnText");
@@ -183,38 +227,44 @@
       const patientId = document.getElementById("loginId").value.trim();
       const phone = document.getElementById("loginPhone").value.trim();
 
+      console.log("Attempting login with Patient ID:", patientId, "Phone:", phone);
+
       if (!patientId || !phone) {
-        loginError.textContent = "Both fields are required.";
+        loginError.textContent = "দয়া করে রোগীর আইডি এবং ফোন নম্বর প্রদান করুন।";
         loginError.classList.remove("hidden");
         return;
       }
 
       loginBtn.disabled = true;
-      loginBtnText.textContent = "Logging in...";
+      loginBtnText.textContent = "লগইন হচ্ছে...";
       loginSpinner.classList.remove("hidden");
 
       try {
         const snapshot = await get(ref(db, `patients/${patientId}`));
+        console.log("Firebase snapshot:", snapshot.exists() ? snapshot.val() : "No data");
         if (snapshot.exists()) {
           const data = snapshot.val();
           if (data.phone === phone) {
             loginError.classList.add("hidden");
+            currentPatient = data;
             showDashboard(data);
             fetchInjections(patientId);
             fetchSubscriptions(patientId);
             document.getElementById("drawerUserImage").src = data.imageUrl || 'https://via.placeholder.com/150';
-            document.getElementById("drawerWelcome").textContent = `Welcome, ${data.name || 'Guest'}`;
+            document.getElementById("drawerWelcome").textContent = `স্বাগতম, ${data.name || 'অতিথি'}`;
           } else {
-            loginError.textContent = "Incorrect phone number.";
+            loginError.textContent = "ভুল ফোন নম্বর।";
             loginError.classList.remove("hidden");
+            console.log("Phone number mismatch. Expected:", data.phone, "Provided:", phone);
           }
         } else {
-          loginError.textContent = "Patient not found.";
+          loginError.textContent = "রোগী পাওয়া যায়নি। দয়া করে সঠিক আইডি প্রদান করুন।";
           loginError.classList.remove("hidden");
+          console.log("Patient not found for ID:", patientId);
         }
       } catch (error) {
-        console.error(error);
-        loginError.textContent = "Database error.";
+        console.error("Login error:", error);
+        loginError.textContent = "ডাটাবেস ত্রুটি। দয়া করে আবার চেষ্টা করুন।";
         loginError.classList.remove("hidden");
       } finally {
         loginBtn.disabled = false;
@@ -224,6 +274,7 @@
     });
 
     function showDashboard(data) {
+      console.log("Showing dashboard with data:", data);
       document.getElementById("loginSection").classList.add("hidden");
       document.getElementById("dashboardSection").classList.remove("hidden");
       document.getElementById("patientName").textContent = data.name || '';
@@ -234,55 +285,261 @@
     }
 
     async function fetchInjections(patientId) {
-      const snapshot = await get(ref(db, `injections/${patientId}`));
-      const table = document.getElementById("injectionTable");
-      table.innerHTML = "";
-      if (snapshot.exists()) {
-        Object.values(snapshot.val()).forEach(inj => {
-          table.innerHTML += `<tr class="hover:bg-blue-50/50 transition-colors">
-            <td class="px-6 py-4">${inj.date || ''}</td>
-            <td class="px-6 py-4">${inj.injectionType || ''}</td>
-            <td class="px-6 py-4">${inj.dosage || ''}</td>
-          </tr>`;
-        });
-      } else {
-        table.innerHTML = `<tr><td colspan="3" class="text-center py-4 text-red-500">No records found</td></tr>`;
+      try {
+        const snapshot = await get(ref(db, `injections/${patientId}`));
+        const table = document.getElementById("injectionTable");
+        table.innerHTML = "";
+        if (snapshot.exists()) {
+          Object.values(snapshot.val()).forEach(inj => {
+            table.innerHTML += `<tr class="hover:bg-blue-50/50 dark:hover:bg-blue-900/50 transition-colors">
+              <td class="px-6 py-4">${inj.date || ''}</td>
+              <td class="px-6 py-4">${inj.injectionType || ''}</td>
+              <td class="px-6 py-4">${inj.dosage || ''}</td>
+            </tr>`;
+          });
+        } else {
+          table.innerHTML = `<tr><td colspan="3" class="text-center py-4 text-red-500 dark:text-red-400">কোনো রেকর্ড পাওয়া যায়নি</td></tr>`;
+        }
+      } catch (error) {
+        console.error("Error fetching injections:", error);
       }
     }
 
     async function fetchSubscriptions(patientId) {
-      const snapshot = await get(ref(db, `subscriptions/${patientId}/yearly`));
-      const table = document.getElementById("subscriptionTable");
-      table.innerHTML = "";
-      if (snapshot.exists()) {
-        Object.values(snapshot.val()).forEach(sub => {
-          table.innerHTML += `<tr class="hover:bg-green-50/50 transition-colors">
-            <td class="px-6 py-4">${sub.transactionNumber || ''}</td>
-            <td class="px-6 py-4">${sub.year || ''}</td>
-            <td class="px-6 py-4">${sub.amount || ''}</td>
-            <td class="px-6 py-4">${sub.date || ''}</td>
-          </tr>`;
-        });
-      } else {
-        table.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-red-500">No subscriptions found</td></tr>`;
+      try {
+        const snapshot = await get(ref(db, `subscriptions/${patientId}/yearly`));
+        const table = document.getElementById("subscriptionTable");
+        table.innerHTML = "";
+        if (snapshot.exists()) {
+          Object.values(snapshot.val()).forEach(sub => {
+            table.innerHTML += `<tr class="hover:bg-green-50/50 dark:hover:bg-green-900/50 transition-colors">
+              <td class="px-6 py-4">${sub.transactionNumber || ''}</td>
+              <td class="px-6 py-4">${sub.year || ''}</td>
+              <td class="px-6 py-4">${sub.amount || ''}</td>
+              <td class="px-6 py-4">${sub.date || ''}</td>
+            </tr>`;
+          });
+        } else {
+          table.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-red-500 dark:text-red-400">কোনো সাবস্ক্রিপশন পাওয়া যায়নি</td></tr>`;
+        }
+      } catch (error) {
+        console.error("Error fetching subscriptions:", error);
       }
     }
 
-    window.toggleDrawer = function () {
-      const drawer = document.getElementById("drawer");
-      const overlay = document.getElementById("overlay");
-      const isHidden = drawer.classList.contains("-translate-x-full");
+    // Emergency Prescription Logic
+    const searchBtn = document.getElementById("searchBtn");
+    const searchInput = document.getElementById("searchInput");
+    const resultContainer = document.getElementById("resultContainer");
+    const prescriptionForm = document.getElementById("prescriptionForm");
+    const prescriptionOutput = document.getElementById("prescriptionOutput");
+    const loader = document.getElementById("loader");
+    const downloadBtn = document.getElementById("downloadBtn");
+    const generateBtnText = document.getElementById("generateBtnText");
+    const generateSpinner = document.getElementById("generateSpinner");
 
-      if (isHidden) {
-        drawer.classList.remove("-translate-x-full");
-        overlay.classList.remove("hidden");
-      } else {
-        drawer.classList.add("-translate-x-full");
-        overlay.classList.add("hidden");
+    const fetchPatientInfo = async () => {
+      const patientId = searchInput.value.trim();
+      if (!patientId) {
+        alert("দয়া করে রোগীর আইডি লিখুন।");
+        return;
+      }
+
+      resultContainer.innerHTML = '';
+      prescriptionOutput.innerHTML = '';
+      downloadBtn.classList.add("hidden");
+      loader.classList.remove("hidden");
+
+      try {
+        const snapshot = await get(ref(db, 'patients/' + patientId));
+        loader.classList.add("hidden");
+
+        if (snapshot.exists()) {
+          currentPatient = snapshot.val();
+          prescriptionForm.classList.remove("hidden");
+
+          resultContainer.innerHTML = `
+            <div class="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md p-6 rounded-xl shadow-xl border-l-4 border-blue-500 dark:border-blue-400 transition-all duration-300 hover:shadow-xl">
+              <h3 class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-4">রোগী পাওয়া গেছে</h3>
+              <p class="text-sm"><strong class="font-semibold text-gray-700 dark:text-gray-200">আইডি:</strong> ${currentPatient.patientId}</p>
+              <p class="text-sm"><strong class="font-semibold text-gray-700 dark:text-gray-200">নাম:</strong> ${currentPatient.name}</p>
+              <p class="text-sm"><strong class="font-semibold text-gray-700 dark:text-gray-200">জন্ম তারিখ:</strong> ${currentPatient.dob}</p>
+              <p class="text-sm"><strong class="font-semibold text-gray-700 dark:text-gray-200">ফোন:</strong> ${currentPatient.phone}</p>
+            </div>
+          `;
+        } else {
+          resultContainer.innerHTML = `<div class="text-red-600 dark:text-red-400 text-center font-semibold mt-4">রোগী পাওয়া যায়নি।</div>`;
+          prescriptionForm.classList.add("hidden");
+        }
+      } catch (error) {
+        console.error("Error fetching patient info:", error);
+        loader.classList.add("hidden");
+        resultContainer.innerHTML = `<div class="text-red-600 dark:text-red-400 text-center font-semibold mt-4">তথ্য আনতে ত্রুটি। পরে আবার চেষ্টা করুন।</div>`;
       }
     };
 
-    window.logout = function () {
+    window.generatePrescription = () => {
+      const organ = document.getElementById("bleedingOrgan").value.trim().replace(/[<>{}]/g, '');
+      const duration = document.getElementById("bleedingDuration").value.trim();
+
+      console.log("Generating prescription with:", { organ, duration });
+
+      if (!organ || !duration) {
+        alert("দয়া করে সব তথ্য পূরণ করুন।");
+        return;
+      }
+      if (duration < 0) {
+        alert("রক্তপাতের সময়কাল ঋণাত্মক হতে পারে না।");
+        return;
+      }
+      if (!/^[ঀ-৾\s-a-zA-Z]+$/.test(organ)) {
+        alert("রক্তপাতের অঙ্গে শুধুমাত্র বাংলা বা ইংরেজি অক্ষর এবং স্পেস ব্যবহার করুন।");
+        return;
+      }
+
+      generateBtnText.textContent = "তৈরি হচ্ছে...";
+      generateSpinner.classList.remove("hidden");
+
+      setTimeout(() => {
+        const prescriptionDate = new Date().toLocaleDateString('bn-BD');
+        prescriptionOutput.innerHTML = `
+          <div id="prescriptionCard" class="relative bg-white dark:bg-gray-900 rounded-lg p-8 border border-gray-200 dark:border-gray-600 shadow-lg">
+            <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-red-500 to-red-700 dark:from-red-400 dark:to-red-600"></div>
+            <div class="flex justify-between items-center mb-6">
+              <div>
+                <h3 class="text-2xl font-extrabold text-red-700 dark:text-red-400">হিমোফিলিয়া সোসাইটি অব বাংলাদেশ</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400">১২৩ মেডিকেল রোড, ঢাকা, বাংলাদেশ</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">ফোন: +৮৮০-২-৫৫০০০০০ | ইমেইল: info@hemophilia.org.bd</p>
+              </div>
+              <img src="OIfP (1).png" alt="Logo" class="w-16 h-16 object-contain" />
+            </div>
+            <hr class="border-gray-300 dark:border-gray-600 mb-6" />
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div class="space-y-2">
+                <p class="text-sm"><span class="font-semibold text-gray-700 dark:text-gray-200">রোগীর নাম:</span> ${currentPatient?.name || 'N/A'}</p>
+                <p class="text-sm"><span class="font-semibold text-gray-700 dark:text-gray-200">রোগীর আইডি:</span> ${currentPatient?.patientId || 'N/A'}</p>
+                <p class="text-sm"><span class="font-semibold text-gray-700 dark:text-gray-200">জন্ম তারিখ:</span> ${currentPatient?.dob || 'N/A'}</p>
+              </div>
+              <div class="space-y-2">
+                <p class="text-sm"><span class="font-semibold text-gray-700 dark:text-gray-200">তারিখ:</span> ${prescriptionDate}</p>
+                <p class="text-sm"><span class="font-semibold text-gray-700 dark:text-gray-200">ফোন:</span> ${currentPatient?.phone || 'N/A'}</p>
+              </div>
+            </div>
+            <div class="mb-6">
+              <h4 class="text-lg font-semibold text-red-600 dark:text-red-400 mb-3">চিকিৎসার বিবরণ</h4>
+              <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                <p class="text-sm"><span class="font-medium text-gray-700 dark:text-gray-200">রক্তপাতের অঙ্গ:</span> ${organ}</p>
+                <p class="text-sm"><span class="font-medium text-gray-700 dark:text-gray-200">রক্তপাতের সময়কাল:</span> ${duration} ঘণ্টা</p>
+              </div>
+            </div>
+            <div class="mb-6">
+              <h4 class="text-lg font-semibold text-red-600 dark:text-red-400 mb-3">প্রেসক্রিপশন</h4>
+              <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                <p class="text-sm"><span class="font-medium text-gray-700 dark:text-gray-200">ঔষধ:</span> Factor VIII</p>
+                <p class="text-sm"><span class="font-medium text-gray-700 dark:text-gray-200">ডোজ:</span> ৫০০ আইইউ, অবিলম্বে শিরায় প্রয়োগ করতে হবে</p>
+                <p class="text-sm"><span class="font-medium text-gray-700 dark:text-gray-200">নির্দেশনা:</span> ২৪ ঘণ্টার মধ্যে চিকিৎসকের পরামর্শ নিন</p>
+              </div>
+            </div>
+            <hr class="border-gray-300 dark:border-gray-600 mb-6" />
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="text-sm font-semibold text-gray-700 dark:text-gray-200">অনুমোদিত:</p>
+                <p class="text-lg font-bold text-red-700 dark:text-red-400">ডাঃ এম. রহমান</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">হিমোফিলিয়া বিশেষজ্ঞ</p>
+              </div>
+              <img src="1.png" alt="Doctor Signature" class="h-12 object-contain" />
+            </div>
+            <div class="mt-6 text-center text-xs text-gray-500 dark:text-gray-400">
+              <p>এই প্রেসক্রিপশন শুধুমাত্র জরুরি ব্যবহারের জন্য। দয়া করে নিকটস্থ চিকিৎসকের সাথে যোগাযোগ করুন।</p>
+            </div>
+          </div>
+        `;
+        downloadBtn.classList.remove("hidden");
+        generateBtnText.textContent = "প্রেসক্রিপশন তৈরি করুন";
+        generateSpinner.classList.add("hidden");
+      }, 1000);
+    };
+
+    window.downloadPDF = async () => {
+      const card = document.getElementById("prescriptionCard");
+      const canvas = await html2canvas(card, { scale: 2 });
+      const imgData = canvas.toDataURL("image/png");
+
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF('p', 'mm', 'a4');
+
+      const pdfWidth = 210;
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`Prescription_${currentPatient?.name || 'Patient'}_${new Date().toISOString().split('T')[0]}.pdf`);
+    };
+
+    searchBtn.addEventListener("click", fetchPatientInfo);
+
+    window.toggleDrawer = function () {
+      try {
+        const drawer = document.getElementById("drawer");
+        const overlay = document.getElementById("overlay");
+        if (!drawer || !overlay) {
+          console.error("Drawer or overlay element not found");
+          return;
+        }
+        const isHidden = drawer.classList.contains("-translate-x-full");
+        console.log("Toggling drawer, current state (hidden):", isHidden);
+
+        if (isHidden) {
+          drawer.classList.remove("-translate-x-full");
+          overlay.classList.remove("hidden");
+        } else {
+          drawer.classList.add("-translate-x-full");
+          overlay.classList.add("hidden");
+        }
+      } catch (error) {
+        console.error("Error toggling drawer:", error);
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const drawerToggleBtn = document.getElementById("drawerToggleBtn");
+      if (drawerToggleBtn) {
+        drawerToggleBtn.addEventListener("click", window.toggleDrawer);
+        console.log("Drawer toggle button listener attached");
+      } else {
+        console.error("Drawer toggle button not found");
+      }
+    });
+
+    window.showSection = function(sectionId) {
+      console.log("Showing section:", sectionId);
+      document.getElementById("dashboardSection").classList.add("hidden");
+      document.getElementById("emergencyPrescriptionSection").classList.add("hidden");
+      document.getElementById(sectionId).classList.remove("hidden");
+      toggleDrawer();
+    };
+
+    window.toggleDarkMode = function() {
+      try {
+        const html = document.documentElement;
+        const icon = document.getElementById("darkModeIcon");
+        if (html.classList.contains("light")) {
+          html.classList.remove("light");
+          html.classList.add("dark");
+          icon.setAttribute("data-lucide", "sun");
+        } else {
+          html.classList.remove("dark");
+          html.classList.add("light");
+          icon.setAttribute("data-lucide", "moon");
+        }
+        lucide.createIcons();
+      } catch (error) {
+        console.error("Error toggling dark mode:", error);
+      }
+    };
+
+    window.logout = function() {
+      console.log("Logging out");
       location.reload();
     };
   </script>
@@ -294,6 +551,18 @@
     }
     .animate-fade-in {
       animation: fadeIn 0.5s ease-out forwards;
+    }
+    .shadow-glow-red {
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+    }
+    .shadow-glow-blue {
+      box-shadow: 0 0 10px rgba(37, 99, 235, 0.5);
+    }
+    .shadow-glow-indigo {
+      box-shadow: 0 0 10px rgba(79, 70, 229, 0.5);
+    }
+    .shadow-glow-green {
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
     }
   </style>
 
